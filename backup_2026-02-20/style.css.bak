@@ -35,17 +35,11 @@ body {
   color: var(--text-main);
   line-height: 1.5;
   min-height: 100vh;
-  min-height: 100dvh;
   display: flex;
   justify-content: center;
   align-items: flex-start;
   padding-top: 4rem;
-  padding-left: env(safe-area-inset-left, 0px);
-  padding-right: env(safe-area-inset-right, 0px);
   overflow-x: hidden;
-  -webkit-overflow-scrolling: touch;
-  overscroll-behavior-y: contain;
-  -webkit-tap-highlight-color: transparent;
 }
 
 #app {
@@ -458,110 +452,47 @@ body {
 
 @media (max-width: 768px) {
   body {
-    padding-top: 1.5rem;
-    padding-bottom: env(safe-area-inset-bottom, 0px);
+    padding-top: 2rem;
   }
 
   #app {
     max-width: 100%;
-    padding: 0 0.875rem;
+    padding: 0 1rem;
     gap: 1.25rem;
   }
 
-  .header {
-    margin-bottom: 1rem;
-  }
-
   .header h1 {
-    font-size: 1.75rem;
+    font-size: 2rem;
   }
 
   .header p {
-    font-size: 0.85rem;
+    font-size: 0.95rem;
   }
 
-  /* Controls: 2-column grid for better use of space */
   .controls {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.5rem;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
     margin-bottom: 1rem;
-  }
-
-  .controls .btn:first-child {
-    grid-column: 1 / -1;
   }
 
   .btn {
     width: 100%;
     text-align: center;
-    padding: 0.75rem 0.5rem;
-    font-size: 0.9rem;
-    min-height: 44px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+    padding: 0.875rem;
+    font-size: 1rem;
   }
 
-  .btn-sm {
-    min-height: 44px;
-    padding: 0.5rem 0.75rem;
-    font-size: 0.8rem;
-  }
-
-  .icon-btn {
-    min-width: 44px;
-    min-height: 44px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .controls-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.5rem;
-  }
-
-  /* Table: horizontal scroll with hint */
+  /* Table: horizontal scroll */
   .table-wrapper {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
-    margin: 0 -0.875rem;
-    padding: 0 0.875rem;
-    position: relative;
-    scrollbar-width: thin;
+    margin: 0 -1rem;
+    padding: 0 1rem;
   }
 
   .bus-table {
-    min-width: 580px;
-  }
-
-  .bus-table tbody td {
-    padding: 0.6rem 0.5rem;
-  }
-
-  .cell-input {
-    padding: 0.5rem;
-    font-size: 0.85rem;
-    min-height: 38px;
-  }
-
-  .table-toggle {
-    min-width: 44px;
-    min-height: 44px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .table-delete-btn {
-    min-width: 44px;
-    min-height: 44px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.1rem;
+    min-width: 600px;
   }
 
   .parking-grid {
@@ -571,178 +502,29 @@ body {
 
   .platform-header {
     font-size: 0.75rem;
-    padding: 0.5rem 0.3rem;
-    min-height: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .bus-slot {
-    padding: 0.45rem 0.4rem;
-    min-height: 44px;
-    justify-content: center;
+    padding: 0.4rem;
   }
 
   .bus-slot-line {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
   }
 
   .bus-slot-dest {
-    font-size: 0.6rem;
-  }
-
-  /* Tab bar: scrollable */
-  .tab-bar {
-    overflow-x: auto;
-    overflow-y: hidden;
-    -webkit-overflow-scrolling: touch;
-    flex-wrap: nowrap;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-  }
-
-  .tab-bar::-webkit-scrollbar {
-    display: none;
-  }
-
-  .tab-btn {
-    white-space: nowrap;
-    flex-shrink: 0;
-    min-height: 44px;
-    font-size: 0.8rem;
-    padding: 0.6rem 0.75rem;
-  }
-
-  /* Search */
-  .search-input {
-    min-height: 44px;
-    font-size: 1rem;
-  }
-
-  /* Section titles */
-  .section-title {
-    font-size: 1.25rem;
-    padding: 0.5rem 0;
+    font-size: 0.55rem;
   }
 }
 
 @media (max-width: 480px) {
-  body {
-    padding-top: 1rem;
-  }
-
-  #app {
-    padding: 0 0.625rem;
-    gap: 1rem;
-  }
-
   .header h1 {
-    font-size: 1.5rem;
-  }
-
-  .header p {
-    font-size: 0.8rem;
+    font-size: 1.6rem;
   }
 
   .parking-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0.35rem;
+    grid-template-columns: repeat(3, 1fr);
   }
 
   .section-title {
-    font-size: 1.1rem;
-  }
-
-  .stat-card {
-    padding: 0.875rem;
-  }
-
-  .stat-value {
-    font-size: 1.5rem;
-  }
-
-  .stat-label {
-    font-size: 0.7rem;
-  }
-
-  .stat-sub {
-    font-size: 0.6rem;
-  }
-
-  .forecast-rate {
-    font-size: 1.5rem;
-  }
-
-  .forecast-label {
-    font-size: 0.75rem;
-  }
-
-  .bar-label {
-    min-width: 45px;
-    font-size: 0.7rem;
-  }
-
-  .controls {
-    gap: 0.4rem;
-  }
-
-  .controls-row {
-    gap: 0.4rem;
-  }
-
-  .btn {
-    font-size: 0.82rem;
-    padding: 0.65rem 0.4rem;
-  }
-
-  .btn-sm {
-    font-size: 0.75rem;
-    padding: 0.45rem 0.5rem;
-  }
-}
-
-/* ========== Extra-small devices (≤360px) ========== */
-@media (max-width: 360px) {
-  #app {
-    padding: 0 0.5rem;
-  }
-
-  .header h1 {
-    font-size: 1.3rem;
-  }
-
-  .header p {
-    font-size: 0.75rem;
-  }
-
-  .controls {
-    grid-template-columns: 1fr;
-  }
-
-  .controls .btn:first-child {
-    grid-column: 1;
-  }
-
-  .controls-row {
-    grid-template-columns: 1fr;
-  }
-
-  .tab-btn {
-    font-size: 0.7rem;
-    padding: 0.5rem 0.5rem;
-  }
-
-  .section-title {
-    font-size: 1rem;
-  }
-
-  .stat-value {
-    font-size: 1.25rem;
-  }
-
-  .parking-grid {
-    grid-template-columns: repeat(2, 1fr);
+    font-size: 1.2rem;
   }
 }
 
@@ -1216,7 +998,7 @@ body {
 /* ========== Toast ========== */
 .toast {
   position: fixed;
-  bottom: calc(2rem + env(safe-area-inset-bottom, 0px));
+  bottom: 2rem;
   left: 50%;
   transform: translateX(-50%) translateY(20px);
   background: var(--bg-card);
@@ -1233,8 +1015,6 @@ body {
   transition: opacity 0.3s, transform 0.3s;
   z-index: 9999;
   pointer-events: none;
-  max-width: calc(100vw - 2rem);
-  text-align: center;
 }
 
 .toast-show {
@@ -1244,51 +1024,29 @@ body {
 
 /* ========== Mobile: New Components ========== */
 @media (max-width: 768px) {
+  .controls {
+    flex-wrap: wrap;
+  }
+
+  .controls-row {
+    flex-wrap: wrap;
+  }
+
   .stats-grid {
     grid-template-columns: 1fr 1fr;
   }
 
   .qr-grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 0.5rem;
-  }
-
-  .qr-card {
-    padding: 0.75rem;
   }
 
   .history-item {
     flex-wrap: wrap;
-    padding: 0.75rem;
   }
 
   .history-bar-wrap {
     order: 3;
     width: 100%;
-  }
-
-  .history-del-btn {
-    min-width: 44px;
-    min-height: 44px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  /* Template panel touch targets */
-  .tpl-load-btn,
-  .tpl-delete-btn {
-    min-height: 40px;
-    min-width: 40px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.35rem 0.65rem;
-    font-size: 0.8rem;
-  }
-
-  .tpl-item {
-    padding: 0.75rem;
   }
 }
 
@@ -1590,21 +1348,21 @@ kbd {
 
 /* ========== Mobile updates ========== */
 @media (max-width: 768px) {
+  .tab-bar {
+    flex-wrap: nowrap;
+  }
+
+  .tab-btn {
+    font-size: 0.75rem;
+    padding: 0.5rem;
+  }
+
   .trend-chart {
     height: 80px;
   }
 
   .heatmap-grid {
     grid-template-columns: repeat(3, 1fr);
-  }
-
-  .trend-label {
-    font-size: 0.55rem;
-  }
-
-  .anomaly-item {
-    font-size: 0.75rem;
-    padding: 0.4rem 0.6rem;
   }
 }
 
@@ -1616,7 +1374,6 @@ kbd {
   right: 0;
   z-index: 9998;
   padding: 0.75rem 1rem;
-  padding-bottom: calc(0.75rem + env(safe-area-inset-bottom, 0px));
   background: var(--bg-card);
   border-top: 1px solid var(--glass-border);
   backdrop-filter: blur(16px);
@@ -1723,46 +1480,6 @@ kbd {
 
   .install-banner-content {
     flex-wrap: wrap;
-    gap: 0.5rem;
-  }
-
-  .install-banner .btn {
-    width: auto;
-    flex-shrink: 0;
-  }
-}
-
-/* ========== Mobile: QR & Heatmap 480px ========== */
-@media (max-width: 480px) {
-  .qr-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .heatmap-grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0.3rem;
-  }
-
-  .heatmap-cell {
-    aspect-ratio: auto;
-    padding: 0.5rem;
-  }
-
-  .history-info {
-    min-width: unset;
-  }
-
-  .trend-chart {
-    height: 65px;
-  }
-
-  .smart-report {
-    padding: 0.75rem;
-    font-size: 0.8rem;
-  }
-
-  .forecast-card {
-    padding: 0.75rem;
   }
 }
 
