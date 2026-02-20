@@ -1,6 +1,7 @@
 import type { Bus } from './BusCard';
 import { getRouteColor } from '../utils/colors';
 import { t } from '../utils/i18n';
+import { getSuggestionsForLine } from '../utils/smartAnalytics';
 
 export type SortField = 'lineNumber' | 'plateNumber' | 'platformNumber' | 'destination' | 'arrived';
 export type SortDir = 'asc' | 'desc';
@@ -118,6 +119,41 @@ export function renderBusTable(
       const id = target.dataset.id!;
       const field = target.dataset.field as keyof Bus;
       onUpdate(id, field, target.value);
+
+      // Auto-fill suggestion when line number changes
+      if (field === 'lineNumber' && target.value.trim()) {
+        const suggestion = getSuggestionsForLine(target.value.trim(), buses);
+        const row = target.closest('tr');
+        // Remove any existing suggestion chip
+        document.querySelector('.suggestion-chip')?.remove();
+
+        if (suggestion && (suggestion.platform || suggestion.destination)) {
+          const chip = document.createElement('div');
+          chip.className = 'suggestion-chip';
+          const parts: string[] = [];
+          if (suggestion.platform) parts.push(`${t('col.platform')}: ${suggestion.platform}`);
+          if (suggestion.destination) parts.push(`${t('col.destination')}: ${suggestion.destination}`);
+          chip.innerHTML = `<span class="chip-text">💡 ${parts.join(' · ')}</span><button class="chip-apply" title="${t('smart.suggestApply')}">${t('smart.suggestApply')}</button>`;
+          chip.querySelector('.chip-apply')?.addEventListener('click', () => {
+            if (suggestion.platform) {
+              const platInput = row?.querySelector('[data-field="platformNumber"]') as HTMLInputElement;
+              if (platInput && !platInput.value) { platInput.value = suggestion.platform; onUpdate(id, 'platformNumber', suggestion.platform); }
+            }
+            if (suggestion.destination) {
+              const destInput = row?.querySelector('[data-field="destination"]') as HTMLInputElement;
+              if (destInput && !destInput.value) { destInput.value = suggestion.destination; onUpdate(id, 'destination', suggestion.destination); }
+            }
+            chip.remove();
+          });
+          // Position below the input, attached to body so it's never clipped
+          document.body.appendChild(chip);
+          const rect = target.getBoundingClientRect();
+          chip.style.top = `${rect.bottom + window.scrollY + 4}px`;
+          chip.style.left = `${rect.left + window.scrollX}px`;
+          // Auto-dismiss after 8s
+          setTimeout(() => chip.remove(), 8000);
+        }
+      }
     }
   });
 

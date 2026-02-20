@@ -169,6 +169,44 @@ const translations: Record<Lang, Record<string, string>> = {
         'manual.analyticsList': '<li><strong>📋 Save Day Log</strong> to record today\'s data.</li><li><strong>Arrival Trend</strong> — Bar chart of the last 7 logs.</li><li><strong>Platform Heatmap</strong> — Color grid showing platform usage.</li><li><strong>Top Lines & Most Late</strong> — Frequency charts.</li>',
         'manual.quickRef': 'Quick Reference',
         'manual.quickRefList': '<li><strong>🔍 Search</strong> — Filter by any field.</li><li><strong>↩ Undo</strong> — Restore last deleted bus.</li><li><strong>☀️/🌙</strong> — Dark/light mode toggle.</li><li><strong>▾ Section headers</strong> — Click to collapse/expand.</li>',
+
+        // Smart Analytics
+        'smart.title': 'Smart Insights',
+        'smart.forecast': 'Forecast',
+        'smart.predictedRate': 'predicted arrival rate',
+        'smart.trendLabel.improving': 'improving',
+        'smart.trendLabel.declining': 'declining',
+        'smart.trendLabel.stable': 'stable',
+        'smart.suggestion': 'suggestion',
+        'smart.suggestApply': 'Apply suggestion',
+        'smart.suggestHint': 'Based on {n} previous entries',
+
+        // Anomaly messages
+        'anomaly.missingPlatform': '{n} bus(es) have no platform assigned.',
+        'anomaly.missingDest': '{n} bus(es) have no destination.',
+        'anomaly.platformOverload': 'Platform {p} is overloaded with {n} buses!',
+        'anomaly.platformBusy': 'Platform {p} is getting busy ({n} buses).',
+        'anomaly.lowArrival': 'Current arrival rate ({current}%) is below your average ({avg}%).',
+        'anomaly.highVolume': 'Unusually high bus count today ({current} vs avg {avg}).',
+        'anomaly.lowVolume': 'Fewer buses than usual today ({current} vs avg {avg}).',
+
+        // Natural Language Report
+        'nlr.noData': 'Save daily logs to see smart insights here.',
+        'nlr.overall': 'Across {days} days, you\'ve tracked {buses} buses with an overall {rate}% arrival rate.',
+        'nlr.weekBetter': 'This week is {pct}% better than last week.',
+        'nlr.weekWorse': 'This week is {pct}% below last week\'s performance.',
+        'nlr.weekSame': 'Performance this week is similar to last week.',
+        'nlr.busiestPlatform': 'Platform {p} is the most used ({n} buses total).',
+        'nlr.bestLine': 'Line {line} is the most reliable ({rate}% arrival rate).',
+        'nlr.worstLine': 'Line {line} needs attention — only {rate}% arrivals.',
+        'nlr.trendUp': 'Trend is improving: +{pct}% over recent logs.',
+        'nlr.trendDown': 'Trend is declining: -{pct}% over recent logs.',
+        'nlr.trendStable': 'Performance trend is steady.',
+        'nlr.forecast': 'Predicted next arrival rate: {rate}%.',
+
+        // Manual - Smart Features
+        'manual.smart': 'Smart Insights (🧠)',
+        'manual.smartList': '<li><strong>Auto-fill</strong> — When you type a line number, the app suggests platform and destination from history.</li><li><strong>Anomaly alerts</strong> — Warns about overloaded platforms, low arrival rates, and missing data.</li><li><strong>Trend forecast</strong> — Predicts your next arrival rate from historical patterns.</li><li><strong>Natural language report</strong> — A readable summary of your fleet performance.</li>',
     },
     he: {
         'app.title': 'מנהל אוטובוסים',
@@ -294,5 +332,40 @@ const translations: Record<Lang, Record<string, string>> = {
         'manual.analyticsList': '<li><strong>📋 שמור יומן</strong> לתיעוד נתוני היום.</li><li><strong>מגמת הגעה</strong> — גרף עמודות של 7 יומנים אחרונים.</li><li><strong>מפת חום רציפים</strong> — רשת צבעים של שימוש ברציפים.</li><li><strong>קווים מובילים ומאחרים</strong> — גרפי תדירות.</li>',
         'manual.quickRef': 'עזרה מהירה',
         'manual.quickRefList': '<li><strong>🔍 חיפוש</strong> — סנן לפי כל שדה.</li><li><strong>↩ בטל</strong> — שחזר אוטובוס שנמחק.</li><li><strong>☀️/🌙</strong> — מצב כהה/בהיר.</li><li><strong>▾ כותרות מקטעים</strong> — לחץ לכיווץ/הרחבה.</li>',
+
+        // Smart Analytics
+        'smart.title': 'תובנות חכמות',
+        'smart.forecast': 'תחזית',
+        'smart.predictedRate': 'אחוז הגעה צפוי',
+        'smart.trendLabel.improving': 'משתפר',
+        'smart.trendLabel.declining': 'יורד',
+        'smart.trendLabel.stable': 'יציב',
+        'smart.suggestion': 'הצעה',
+        'smart.suggestApply': 'החל הצעה',
+        'smart.suggestHint': 'בהתבסס על {n} רשומות קודמות',
+
+        'anomaly.missingPlatform': '{n} אוטובוסים ללא רציף.',
+        'anomaly.missingDest': '{n} אוטובוסים ללא יעד.',
+        'anomaly.platformOverload': 'רציף {p} עמוס מדי — {n} אוטובוסים!',
+        'anomaly.platformBusy': 'רציף {p} מתמלא ({n} אוטובוסים).',
+        'anomaly.lowArrival': 'אחוז הגעה נוכחי ({current}%) נמוך מהממוצע ({avg}%).',
+        'anomaly.highVolume': 'כמות אוטובוסים גבוהה מהרגיל ({current} לעומת ממוצע {avg}).',
+        'anomaly.lowVolume': 'פחות אוטובוסים מהרגיל ({current} לעומת ממוצע {avg}).',
+
+        'nlr.noData': 'שמור יומנים יומיים כדי לראות תובנות חכמות כאן.',
+        'nlr.overall': 'לאורך {days} ימים, עקבת אחרי {buses} אוטובוסים עם אחוז הגעה כולל של {rate}%.',
+        'nlr.weekBetter': 'השבוע טוב ב-{pct}% מהשבוע שעבר.',
+        'nlr.weekWorse': 'השבוע נמוך ב-{pct}% מהשבוע שעבר.',
+        'nlr.weekSame': 'הביצועים השבוע דומים לשבוע שעבר.',
+        'nlr.busiestPlatform': 'רציף {p} הוא הכי עמוס ({n} אוטובוסים סה"כ).',
+        'nlr.bestLine': 'קו {line} הכי אמין ({rate}% הגעות).',
+        'nlr.worstLine': 'קו {line} דורש תשומת לב — רק {rate}% הגעות.',
+        'nlr.trendUp': 'מגמה חיובית: +{pct}% ביומנים האחרונים.',
+        'nlr.trendDown': 'מגמה שלילית: -{pct}% ביומנים האחרונים.',
+        'nlr.trendStable': 'מגמת הביצועים יציבה.',
+        'nlr.forecast': 'אחוז הגעה צפוי: {rate}%.',
+
+        'manual.smart': 'תובנות חכמות (🧠)',
+        'manual.smartList': '<li><strong>מילוי אוטומטי</strong> — כשמקלידים מספר קו, האפליקציה מציעה רציף ויעד מההיסטוריה.</li><li><strong>התראות חריגות</strong> — אזהרות על רציפים עמוסים, אחוזי הגעה נמוכים ונתונים חסרים.</li><li><strong>תחזית מגמה</strong> — חיזוי אחוז ההגעה הבא מדפוסים היסטוריים.</li><li><strong>דוח טבעי</strong> — סיכום קריא של ביצועי הצי.</li>',
     },
 };

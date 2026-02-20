@@ -1,5 +1,6 @@
 import { getAllLogs } from './History';
 import { t } from '../utils/i18n';
+import { renderSmartInsights } from '../utils/smartAnalytics';
 
 export function renderDashboard(): HTMLDivElement {
   const wrapper = document.createElement('div');
@@ -14,6 +15,7 @@ export function renderDashboard(): HTMLDivElement {
     if (logs.length === 0) {
       wrapper.innerHTML = `
         <p class="template-empty">${t('dash.empty')}</p>
+        ${renderSmartInsights([])}
       `;
       return;
     }
@@ -140,6 +142,8 @@ export function renderDashboard(): HTMLDivElement {
     }).join('')}
       </div>
       ` : ''}
+
+      ${renderSmartInsights(logs.length > 0 ? logs[0].buses : [])}
     `;
   }
 
