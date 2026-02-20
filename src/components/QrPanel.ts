@@ -15,7 +15,6 @@ export function renderQrPanel(
         const buses = getBuses().filter(b => b.lineNumber);
 
         wrapper.innerHTML = `
-      <h2 class="section-title">${t('qr.title')}</h2>
       <p class="map-hint">${t('qr.hint')}</p>
       ${buses.length === 0 ? `<p class="template-empty">${t('qr.empty')}</p>` : ''}
       <div class="qr-grid" id="qr-grid"></div>

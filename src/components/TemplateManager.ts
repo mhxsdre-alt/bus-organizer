@@ -55,7 +55,6 @@ export function renderTemplatePanel(
         const templates = TemplateStore.getAll();
 
         panel.innerHTML = `
-      <h2 class="section-title">${t('tpl.title')}</h2>
       <div class="template-actions">
         <button id="save-template-btn" class="btn btn-sm">${t('tpl.save')}</button>
       </div>

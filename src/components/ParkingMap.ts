@@ -14,7 +14,6 @@ export function renderParkingMap(buses: Bus[], onMoveBus: OnMoveBus): HTMLDivEle
     wrapper.id = 'parking-map';
 
     wrapper.innerHTML = `
-    <h2 class="section-title">${t('map.title')}</h2>
     <p class="map-hint">${t('map.hint')}</p>
   `;
 

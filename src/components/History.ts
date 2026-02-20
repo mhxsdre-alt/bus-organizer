@@ -47,7 +47,6 @@ export function renderHistory(onRefresh: () => void): HTMLDivElement {
   function rebuild() {
     const logs = getAllLogs();
     wrapper.innerHTML = `
-      <h2 class="section-title">${t('hist.title')}</h2>
       ${logs.length === 0 ? `<p class="template-empty">${t('hist.empty')}</p>` : ''}
       <div class="history-list">
         ${logs.map(log => {
