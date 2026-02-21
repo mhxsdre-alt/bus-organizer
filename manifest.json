@@ -2,14 +2,15 @@
     "name": "Bus Organizer",
     "short_name": "Bus Org",
     "description": "Manage your bus fleet — track arrivals, platforms, and download reports.",
-    "start_url": "/",
+    "start_url": "/bus-organizer/",
+    "scope": "/bus-organizer/",
     "display": "standalone",
     "background_color": "#101720",
     "theme_color": "#2596be",
     "orientation": "any",
     "icons": [
         {
-            "src": "/icons/icon-512.svg",
+            "src": "/bus-organizer/icons/icon-512.svg",
             "sizes": "any",
             "type": "image/svg+xml",
             "purpose": "any maskable"
