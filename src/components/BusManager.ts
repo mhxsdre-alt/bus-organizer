@@ -2,6 +2,7 @@ import type { Bus } from './BusCard';
 import { type SortField, type SortDir, renderBusTable } from './BusTable';
 import { renderParkingMap } from './ParkingMap';
 import { generatePdfReport } from './PdfReport';
+import { dbGet, dbSet } from '../utils/storage';
 
 const SESSION_KEY = 'bus-organizer-session';
 
@@ -24,8 +25,12 @@ export class BusManager {
         if (!mapEl) throw new Error(`Map container with id ${mapContainerId} not found`);
         this.mapContainer = mapEl as HTMLDivElement;
 
-        // Restore auto-saved session
-        this.restoreSession();
+        this.render();
+    }
+
+    /** Initialize from IndexedDB. Call once after constructor. */
+    async initFromDB() {
+        await this.restoreSession();
         this.render();
     }
 
@@ -218,21 +223,16 @@ export class BusManager {
         } catch { /* ignore bad JSON */ }
     }
 
-    // Auto-save
+    // Auto-save to IndexedDB (fire-and-forget)
     private saveSession() {
-        try {
-            localStorage.setItem(SESSION_KEY, JSON.stringify(this.buses));
-        } catch { /* quota full */ }
+        dbSet(SESSION_KEY, this.buses).catch(() => { /* quota full */ });
     }
 
-    private restoreSession() {
+    private async restoreSession() {
         try {
-            const raw = localStorage.getItem(SESSION_KEY);
-            if (raw) {
-                const parsed = JSON.parse(raw);
-                if (Array.isArray(parsed)) {
-                    this.buses = parsed.map(b => ({ ...b, notes: b.notes || '' }));
-                }
+            const parsed = await dbGet<Bus[]>(SESSION_KEY);
+            if (parsed && Array.isArray(parsed)) {
+                this.buses = parsed.map(b => ({ ...b, notes: b.notes || '' }));
             }
         } catch { /* corrupt data */ }
     }

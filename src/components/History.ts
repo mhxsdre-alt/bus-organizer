@@ -1,5 +1,6 @@
 import type { Bus } from './BusCard';
 import { t, getLang } from '../utils/i18n';
+import { dbGet, dbSet } from '../utils/storage';
 
 export interface DayLog {
   id: string;
@@ -11,9 +12,9 @@ export interface DayLog {
 
 const LOG_KEY = 'bus-organizer-logs';
 
-export function saveDayLog(buses: Bus[]) {
+export async function saveDayLog(buses: Bus[]) {
   if (buses.length === 0) return;
-  const logs = getAllLogs();
+  const logs = await getAllLogs();
   const log: DayLog = {
     id: crypto.randomUUID(),
     date: new Date().toISOString(),
@@ -23,19 +24,19 @@ export function saveDayLog(buses: Bus[]) {
   };
   logs.unshift(log); // newest first
   if (logs.length > 30) logs.length = 30; // keep last 30
-  localStorage.setItem(LOG_KEY, JSON.stringify(logs));
+  await dbSet(LOG_KEY, logs);
 }
 
-export function getAllLogs(): DayLog[] {
+export async function getAllLogs(): Promise<DayLog[]> {
   try {
-    const raw = localStorage.getItem(LOG_KEY);
-    return raw ? JSON.parse(raw) : [];
+    const data = await dbGet<DayLog[]>(LOG_KEY);
+    return data ?? [];
   } catch { return []; }
 }
 
-export function deleteLog(id: string) {
-  const logs = getAllLogs().filter(l => l.id !== id);
-  localStorage.setItem(LOG_KEY, JSON.stringify(logs));
+export async function deleteLog(id: string) {
+  const logs = (await getAllLogs()).filter(l => l.id !== id);
+  await dbSet(LOG_KEY, logs);
 }
 
 export function renderHistory(onRefresh: () => void): HTMLDivElement {
@@ -44,8 +45,8 @@ export function renderHistory(onRefresh: () => void): HTMLDivElement {
 
   rebuild();
 
-  function rebuild() {
-    const logs = getAllLogs();
+  async function rebuild() {
+    const logs = await getAllLogs();
     wrapper.innerHTML = `
       ${logs.length === 0 ? `<p class="template-empty">${t('hist.empty')}</p>` : ''}
       <div class="history-list">
@@ -72,9 +73,9 @@ export function renderHistory(onRefresh: () => void): HTMLDivElement {
     `;
 
     wrapper.querySelectorAll('.history-del-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
+      btn.addEventListener('click', async () => {
         const id = (btn as HTMLElement).dataset.id!;
-        deleteLog(id);
+        await deleteLog(id);
         rebuild();
         onRefresh();
       });

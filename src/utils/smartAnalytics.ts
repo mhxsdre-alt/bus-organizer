@@ -15,7 +15,7 @@ interface LineSuggestion {
  * Given a line number, return the most common platform and destination
  * based on historical log data + current session data.
  */
-export function getSuggestionsForLine(lineNumber: string, sessionBuses?: { lineNumber: string; platformNumber: string; destination: string }[]): LineSuggestion | null {
+export async function getSuggestionsForLine(lineNumber: string, sessionBuses?: { lineNumber: string; platformNumber: string; destination: string }[]): Promise<LineSuggestion | null> {
     if (!lineNumber.trim()) return null;
 
     const platformCounts: Record<string, number> = {};
@@ -23,7 +23,7 @@ export function getSuggestionsForLine(lineNumber: string, sessionBuses?: { lineN
     let totalOccurrences = 0;
 
     // Mine historical logs
-    const logs = getAllLogs();
+    const logs = await getAllLogs();
     for (const log of logs) {
         for (const bus of log.buses) {
             if (bus.lineNumber === lineNumber) {
@@ -69,11 +69,11 @@ export interface Anomaly {
 /**
  * Detect anomalies in current session compared to historical averages.
  */
-export function detectAnomalies(
+export async function detectAnomalies(
     currentBuses: { lineNumber: string; plateNumber: string; platformNumber: string; destination: string; arrived: boolean }[],
-): Anomaly[] {
+): Promise<Anomaly[]> {
     const anomalies: Anomaly[] = [];
-    const logs = getAllLogs();
+    const logs = await getAllLogs();
 
     if (currentBuses.length === 0) return anomalies;
 
@@ -171,8 +171,8 @@ export interface Forecast {
 /**
  * Simple moving average forecast from historical logs.
  */
-export function getForecast(): Forecast | null {
-    const logs = getAllLogs();
+export async function getForecast(): Promise<Forecast | null> {
+    const logs = await getAllLogs();
     if (logs.length < 3) return null;
 
     const recent = logs.slice(0, Math.min(7, logs.length));
@@ -214,8 +214,8 @@ export function getForecast(): Forecast | null {
 /**
  * Generate a human-readable summary of analytics data.
  */
-export function generateNLReport(): string {
-    const logs = getAllLogs();
+export async function generateNLReport(): Promise<string> {
+    const logs = await getAllLogs();
 
     if (logs.length === 0) {
         return t('nlr.noData');
@@ -287,7 +287,7 @@ export function generateNLReport(): string {
     }
 
     // Forecast
-    const forecast = getForecast();
+    const forecast = await getForecast();
     if (forecast) {
         if (forecast.trend === 'improving') {
             parts.push(t('nlr.trendUp').replace('{pct}', String(Math.abs(forecast.trendPct))));
@@ -312,13 +312,13 @@ function getArrivalRate(logs: DayLog[]): number {
 // RENDER: Forecast + NLR + Anomalies panel for Dashboard
 // ======================================================
 
-export function renderSmartInsights(
+export async function renderSmartInsights(
     currentBuses: { lineNumber: string; plateNumber: string; platformNumber: string; destination: string; arrived: boolean }[],
-): string {
-    const anomalies = detectAnomalies(currentBuses);
-    const forecast = getForecast();
-    const nlReport = generateNLReport();
-    const logs = getAllLogs();
+): Promise<string> {
+    const anomalies = await detectAnomalies(currentBuses);
+    const forecast = await getForecast();
+    const nlReport = await generateNLReport();
+    const logs = await getAllLogs();
 
     if (logs.length === 0 && anomalies.length === 0) return '';
 

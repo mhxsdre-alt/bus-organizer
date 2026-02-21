@@ -6,6 +6,7 @@ import { renderDashboard } from './components/Dashboard'
 import { renderQrPanel, handleCheckInFromUrl } from './components/QrPanel'
 import { renderManual } from './components/Manual'
 import { t, getLang, setLang, onLangChange } from './utils/i18n'
+import { initStorage, dbGetAll, dbSet, dbClearAll } from './utils/storage'
 
 // ===== Theme =====
 const savedTheme = localStorage.getItem('bus-theme') || 'dark';
@@ -92,6 +93,54 @@ function makeCollapsible(id: string) {
   });
 }
 
+// ===== Clear Storage with Type-to-Confirm =====
+function showClearStorageModal() {
+  const confirmWord = t('clear.typeWord');
+  const overlay = document.createElement('div');
+  overlay.className = 'modal-overlay';
+  overlay.innerHTML = `
+    <div class="modal-card">
+      <p class="modal-msg" style="font-size:1.1rem;">⚠️ ${t('clear.title')}</p>
+      <p style="font-size:0.85rem;color:var(--text-muted);margin-bottom:1rem;text-align:center;">${t('clear.warning')}</p>
+      <p style="font-size:0.85rem;text-align:center;margin-bottom:0.75rem;">
+        ${t('clear.instruction')} <strong style="color:#ef4444;">${confirmWord}</strong>
+      </p>
+      <input type="text" class="cell-input clear-storage-input" id="clear-confirm-input"
+             placeholder="${t('clear.inputPlaceholder')}" autocomplete="off">
+      <div class="modal-actions" style="margin-top:1rem;">
+        <button class="btn btn-sm clear-confirm-btn" id="clear-confirm-btn" disabled
+                style="background:linear-gradient(135deg,#ef4444,#dc2626);">${t('clear.confirm')}</button>
+        <button class="btn btn-sm btn-secondary modal-cancel">${t('confirm.cancel')}</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+  requestAnimationFrame(() => overlay.classList.add('modal-visible'));
+
+  const input = overlay.querySelector('#clear-confirm-input') as HTMLInputElement;
+  const confirmBtn = overlay.querySelector('#clear-confirm-btn') as HTMLButtonElement;
+
+  input.addEventListener('input', () => {
+    const match = input.value.trim() === confirmWord;
+    confirmBtn.disabled = !match;
+    confirmBtn.style.opacity = match ? '1' : '0.4';
+  });
+
+  confirmBtn.addEventListener('click', async () => {
+    if (input.value.trim() !== confirmWord) return;
+    await dbClearAll();
+    overlay.classList.remove('modal-visible');
+    setTimeout(() => overlay.remove(), 200);
+    showToast(t('toast.cleared'));
+    setTimeout(() => window.location.reload(), 1000);
+  });
+
+  overlay.querySelector('.modal-cancel')!.addEventListener('click', () => {
+    overlay.classList.remove('modal-visible');
+    setTimeout(() => overlay.remove(), 200);
+  });
+}
+
 // ===== Manager (persists across rebuilds) =====
 let manager: BusManager | null = null;
 
@@ -151,6 +200,12 @@ function buildApp() {
         </label>
       </div>
 
+      <div class="controls-row">
+        <button id="clear-storage-btn" class="btn btn-sm btn-secondary" style="color:#ef4444;border-color:rgba(239,68,68,0.3);">
+          🗑️ ${t('btn.clearStorage')}
+        </button>
+      </div>
+
       <div id="bus-list"></div>
 
       <h2 class="section-title section-collapsible" data-collapse="map-body">${t('map.title')}</h2>
@@ -202,6 +257,7 @@ function buildApp() {
   // ===== Init or Re-bind Bus Manager =====
   if (!manager) {
     manager = new BusManager('bus-list', 'parking-map-container');
+    manager.initFromDB(); // async — loads data and re-renders
   } else {
     manager.rebind('bus-list', 'parking-map-container');
   }
@@ -214,8 +270,8 @@ function buildApp() {
   document.getElementById('add-bus-btn')?.addEventListener('click', () => m.addBus());
   document.getElementById('download-btn')?.addEventListener('click', () => m.downloadReport());
 
-  document.getElementById('save-log-btn')?.addEventListener('click', () => {
-    saveDayLog(m.getBuses());
+  document.getElementById('save-log-btn')?.addEventListener('click', async () => {
+    await saveDayLog(m.getBuses());
     refreshPanels();
     showToast(t('toast.logSaved'));
   });
@@ -255,13 +311,12 @@ function buildApp() {
     reader.readAsText(file);
   });
 
-  // Full Backup
-  document.getElementById('backup-btn')?.addEventListener('click', () => {
+  // Full Backup (reads from IndexedDB)
+  document.getElementById('backup-btn')?.addEventListener('click', async () => {
+    const allData = await dbGetAll();
     const backup = {
-      version: 1,
-      session: JSON.parse(localStorage.getItem('bus-organizer-session') || '[]'),
-      templates: JSON.parse(localStorage.getItem('bus-organizer-templates') || '[]'),
-      logs: JSON.parse(localStorage.getItem('bus-organizer-logs') || '[]'),
+      version: 2,
+      storage: allData,
       theme: localStorage.getItem('bus-theme') || 'dark',
       lang: getLang(),
       exportedAt: new Date().toISOString(),
@@ -276,18 +331,28 @@ function buildApp() {
     showToast(t('toast.backupDone'));
   });
 
-  // Restore Backup
+  // Restore Backup (writes to IndexedDB)
   document.getElementById('restore-input')?.addEventListener('change', (e) => {
     const file = (e.target as HTMLInputElement).files?.[0];
     if (!file) return;
     showConfirm(t('confirm.restore'), () => {
       const reader = new FileReader();
-      reader.onload = () => {
+      reader.onload = async () => {
         try {
           const data = JSON.parse(reader.result as string);
-          if (data.session) localStorage.setItem('bus-organizer-session', JSON.stringify(data.session));
-          if (data.templates) localStorage.setItem('bus-organizer-templates', JSON.stringify(data.templates));
-          if (data.logs) localStorage.setItem('bus-organizer-logs', JSON.stringify(data.logs));
+
+          if (data.version === 2 && data.storage) {
+            // New IndexedDB backup format
+            for (const [key, value] of Object.entries(data.storage)) {
+              await dbSet(key, value);
+            }
+          } else {
+            // Legacy localStorage backup format
+            if (data.session) await dbSet('bus-organizer-session', data.session);
+            if (data.templates) await dbSet('bus-organizer-templates', data.templates);
+            if (data.logs) await dbSet('bus-organizer-logs', data.logs);
+          }
+
           if (data.theme) localStorage.setItem('bus-theme', data.theme);
           if (data.lang) localStorage.setItem('bus-lang', data.lang);
           showToast(t('toast.restored'));
@@ -298,6 +363,11 @@ function buildApp() {
       };
       reader.readAsText(file);
     });
+  });
+
+  // Clear Storage
+  document.getElementById('clear-storage-btn')?.addEventListener('click', () => {
+    showClearStorageModal();
   });
 
   // Template Panel
@@ -351,8 +421,13 @@ function buildApp() {
   makeCollapsible('dash-body');
 }
 
-// Initial build
-buildApp();
+// ===== App Startup (async) =====
+async function startApp() {
+  await initStorage();
+  buildApp();
+}
+
+startApp();
 
 // Rebuild on language change
 onLangChange(() => buildApp());

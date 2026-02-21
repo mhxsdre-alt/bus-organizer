@@ -1422,6 +1422,20 @@ body {
   justify-content: center;
 }
 
+.clear-storage-input {
+  width: 100%;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+.clear-storage-input:focus {
+  border-color: #ef4444;
+  background: rgba(239, 68, 68, 0.05);
+}
+
 /* ========== Manual ========== */
 .manual-panel {
   animation: fadeInUp 0.6s ease-out;

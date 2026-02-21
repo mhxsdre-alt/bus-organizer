@@ -52,6 +52,7 @@ const translations: Record<Lang, Record<string, string>> = {
         'btn.importJson': '📥 Import JSON',
         'btn.backup': '💾 Full Backup',
         'btn.restore': '📂 Restore Backup',
+        'btn.clearStorage': '🗑️ Clear All Storage',
         'search.placeholder': '🔍 Search buses...',
 
         // Table
@@ -126,6 +127,15 @@ const translations: Record<Lang, Record<string, string>> = {
         'toast.installed': '✓ App installed!',
         'toast.checkedIn': 'checked in!',
         'toast.busNotFound': '⚠ Bus not found — it may have been removed.',
+        'toast.cleared': '✓ All storage cleared!',
+
+        // Clear storage
+        'clear.title': 'Clear All Storage',
+        'clear.warning': 'This will permanently delete ALL your data: buses, templates, logs, and settings. This cannot be undone.',
+        'clear.instruction': 'To confirm, type the word:',
+        'clear.typeWord': 'DELETE',
+        'clear.inputPlaceholder': 'Type DELETE to confirm...',
+        'clear.confirm': '🗑️ Erase Everything',
 
         // Install banner
         'install.title': 'Install Bus Organizer',
@@ -226,6 +236,7 @@ const translations: Record<Lang, Record<string, string>> = {
         'btn.importJson': '📥 ייבוא JSON',
         'btn.backup': '💾 גיבוי מלא',
         'btn.restore': '📂 שחזור גיבוי',
+        'btn.clearStorage': '🗑️ מחיקת כל הנתונים',
         'search.placeholder': '🔍 חיפוש אוטובוסים...',
 
         'col.line': 'קו',
@@ -292,6 +303,15 @@ const translations: Record<Lang, Record<string, string>> = {
         'toast.installed': '✓ האפליקציה הותקנה!',
         'toast.checkedIn': 'עשה צ\'ק-אין!',
         'toast.busNotFound': '⚠ אוטובוס לא נמצא — ייתכן שנמחק.',
+        'toast.cleared': '✓ כל הנתונים נמחקו!',
+
+        // Clear storage
+        'clear.title': 'מחיקת כל הנתונים',
+        'clear.warning': 'פעולה זו תמחק לצמיתות את כל הנתונים: אוטובוסים, תבניות, יומנים והגדרות. לא ניתן לבטל פעולה זו.',
+        'clear.instruction': 'לאישור, הקלד את המילה:',
+        'clear.typeWord': 'מחיקה',
+        'clear.inputPlaceholder': 'הקלד מחיקה לאישור...',
+        'clear.confirm': '🗑️ מחק הכל',
 
         'install.title': 'התקן מנהל אוטובוסים',
         'install.desc': 'הוסף למסך הבית לגישה מהירה ושימוש אופליין',

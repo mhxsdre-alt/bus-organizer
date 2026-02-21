@@ -1,5 +1,6 @@
 import type { Bus } from './BusCard';
 import { t } from '../utils/i18n';
+import { dbGet, dbSet } from '../utils/storage';
 
 export interface Template {
     id: string;
@@ -12,30 +13,29 @@ export interface Template {
 const STORAGE_KEY = 'bus-organizer-templates';
 
 export class TemplateStore {
-    static getAll(): Template[] {
+    static async getAll(): Promise<Template[]> {
         try {
-            const raw = localStorage.getItem(STORAGE_KEY);
-            return raw ? JSON.parse(raw) : [];
+            const data = await dbGet<Template[]>(STORAGE_KEY);
+            return data ?? [];
         } catch {
             return [];
         }
     }
 
-    static save(template: Template): void {
-        const all = this.getAll();
-        // Overwrite if same id exists
+    static async save(template: Template): Promise<void> {
+        const all = await this.getAll();
         const idx = all.findIndex(t => t.id === template.id);
         if (idx >= 0) {
             all[idx] = template;
         } else {
             all.push(template);
         }
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(all));
+        await dbSet(STORAGE_KEY, all);
     }
 
-    static remove(id: string): void {
-        const all = this.getAll().filter(t => t.id !== id);
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(all));
+    static async remove(id: string): Promise<void> {
+        const all = (await this.getAll()).filter(t => t.id !== id);
+        await dbSet(STORAGE_KEY, all);
     }
 }
 
@@ -51,8 +51,8 @@ export function renderTemplatePanel(
 
     rebuild();
 
-    function rebuild() {
-        const templates = TemplateStore.getAll();
+    async function rebuild() {
+        const templates = await TemplateStore.getAll();
 
         panel.innerHTML = `
       <div class="template-actions">
@@ -84,7 +84,7 @@ export function renderTemplatePanel(
             panel.querySelector('#save-form')?.classList.add('hidden');
         });
 
-        panel.querySelector('#confirm-save-btn')?.addEventListener('click', () => {
+        panel.querySelector('#confirm-save-btn')?.addEventListener('click', async () => {
             const nameInput = panel.querySelector('#tpl-name') as HTMLInputElement;
             const daySelect = panel.querySelector('#tpl-day') as HTMLSelectElement;
             const name = nameInput.value.trim();
@@ -94,10 +94,9 @@ export function renderTemplatePanel(
             }
 
             const buses = getCurrentBuses();
-            // Strip arrived status when saving template
             const cleanBuses = buses.map(b => ({
                 ...b,
-                id: crypto.randomUUID(), // Fresh IDs for template
+                id: crypto.randomUUID(),
                 arrived: false,
             }));
 
@@ -109,20 +108,20 @@ export function renderTemplatePanel(
                 createdAt: new Date().toISOString(),
             };
 
-            TemplateStore.save(template);
+            await TemplateStore.save(template);
             rebuild();
         });
 
         // Wire load/delete buttons via delegation
-        panel.querySelector('#template-list')?.addEventListener('click', (e) => {
+        panel.querySelector('#template-list')?.addEventListener('click', async (e) => {
             const target = e.target as HTMLElement;
 
             const loadBtn = target.closest('.tpl-load-btn') as HTMLElement | null;
             if (loadBtn) {
                 const id = loadBtn.dataset.id!;
-                const template = TemplateStore.getAll().find(t => t.id === id);
+                const allTemplates = await TemplateStore.getAll();
+                const template = allTemplates.find(t => t.id === id);
                 if (template) {
-                    // Give fresh IDs and reset arrival
                     const freshBuses = template.buses.map(b => ({
                         ...b,
                         id: crypto.randomUUID(),
@@ -135,7 +134,7 @@ export function renderTemplatePanel(
             const delBtn = target.closest('.tpl-delete-btn') as HTMLElement | null;
             if (delBtn) {
                 const id = delBtn.dataset.id!;
-                TemplateStore.remove(id);
+                await TemplateStore.remove(id);
                 rebuild();
             }
         });
@@ -145,7 +144,6 @@ export function renderTemplatePanel(
 }
 
 function groupByDay(templates: Template[]): string {
-    // Group by day
     const groups: Record<string, Template[]> = {};
     templates.forEach(tpl => {
         const key = tpl.dayOfWeek || t('tpl.anyDay');

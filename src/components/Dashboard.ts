@@ -9,13 +9,14 @@ export function renderDashboard(): HTMLDivElement {
 
   rebuild();
 
-  function rebuild() {
-    const logs = getAllLogs();
+  async function rebuild() {
+    const logs = await getAllLogs();
 
     if (logs.length === 0) {
+      const insightsHtml = await renderSmartInsights([]);
       wrapper.innerHTML = `
         <p class="template-empty">${t('dash.empty')}</p>
-        ${renderSmartInsights([])}
+        ${insightsHtml}
       `;
       return;
     }
@@ -142,9 +143,10 @@ export function renderDashboard(): HTMLDivElement {
     }).join('')}
       </div>
       ` : ''}
-
-      ${renderSmartInsights(logs.length > 0 ? logs[0].buses : [])}
     `;
+
+    const smartHtml = await renderSmartInsights(logs.length > 0 ? logs[0].buses : []);
+    wrapper.innerHTML = wrapper.innerHTML + smartHtml;
   }
 
   (wrapper as any)._rebuild = rebuild;

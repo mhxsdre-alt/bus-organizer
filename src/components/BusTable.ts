@@ -113,7 +113,7 @@ export function renderBusTable(
   wrapper.appendChild(table);
 
   // Event delegation
-  wrapper.addEventListener('input', (e) => {
+  wrapper.addEventListener('input', async (e) => {
     const target = e.target as HTMLInputElement;
     if (target.classList.contains('cell-input')) {
       const id = target.dataset.id!;
@@ -122,7 +122,7 @@ export function renderBusTable(
 
       // Auto-fill suggestion when line number changes
       if (field === 'lineNumber' && target.value.trim()) {
-        const suggestion = getSuggestionsForLine(target.value.trim(), buses);
+        const suggestion = await getSuggestionsForLine(target.value.trim(), buses);
         const row = target.closest('tr');
         // Remove any existing suggestion chip
         document.querySelector('.suggestion-chip')?.remove();
