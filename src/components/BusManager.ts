@@ -205,8 +205,8 @@ export class BusManager {
         return sorted;
     }
 
-    downloadReport() {
-        generatePdfReport(this.buses);
+    async downloadReport() {
+        await generatePdfReport(this.buses);
     }
 
     // Export/Import for sharing

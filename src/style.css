@@ -7,6 +7,10 @@
   --accent: #3ab4d8;
   --text-main: #e8edf3;
   --text-muted: #8899aa;
+  --text: #e8edf3;
+  --border: rgba(255, 255, 255, 0.1);
+  --card-bg: rgba(22, 30, 42, 0.82);
+  --radius: 0.5rem;
   --glass-border: rgba(255, 255, 255, 0.08);
   --shadow-lg: 0 10px 30px -5px rgba(0, 0, 0, 0.25);
 }
@@ -19,6 +23,10 @@
   --accent: #1e94b8;
   --text-main: #1a1f2e;
   --text-muted: #4a5568;
+  --text: #1a1f2e;
+  --border: rgba(0, 0, 0, 0.12);
+  --card-bg: #ffffff;
+  --radius: 0.5rem;
   --glass-border: rgba(0, 0, 0, 0.1);
   --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.06);
 }
@@ -625,6 +633,66 @@ body {
     font-size: 1.25rem;
     padding: 0.5rem 0;
   }
+
+  /* Calendar mobile */
+  .cal-header {
+    gap: 0.35rem;
+  }
+
+  .cal-title {
+    font-size: 0.95rem;
+  }
+
+  .cal-day {
+    min-height: 36px;
+  }
+
+  .cal-day-num {
+    font-size: 0.75rem;
+  }
+
+  .cal-week-day {
+    min-height: 60px;
+    padding: 0.4rem 0.15rem;
+  }
+
+  .cal-week-label {
+    font-size: 0.6rem;
+  }
+
+  .cal-week-stat {
+    font-size: 0.55rem;
+  }
+
+  .cal-log-item {
+    padding: 0.5rem;
+  }
+
+  .cal-log-time {
+    font-size: 0.8rem;
+  }
+
+  .cal-log-stats {
+    font-size: 0.75rem;
+  }
+
+  /* Complaints mobile */
+  .complaint-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .complaint-card-header {
+    flex-wrap: wrap;
+  }
+
+  .complaint-card-photo {
+    max-width: 100%;
+  }
+
+  .complaint-photo-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }
 
 @media (max-width: 480px) {
@@ -668,6 +736,47 @@ body {
 
   .stat-sub {
     font-size: 0.6rem;
+  }
+
+  /* Calendar 480px */
+  .cal-day {
+    min-height: 32px;
+  }
+
+  .cal-day-num {
+    font-size: 0.7rem;
+  }
+
+  .cal-dot {
+    width: 5px;
+    height: 5px;
+  }
+
+  .cal-week-day {
+    min-height: 55px;
+  }
+
+  .cal-nav-btn,
+  .cal-view-btn {
+    min-height: 44px;
+    padding: 0.4rem;
+  }
+
+  /* Complaints 480px */
+  .complaint-card {
+    padding: 0.6rem;
+  }
+
+  .complaint-card-type {
+    font-size: 0.7rem;
+  }
+
+  .complaint-card-date {
+    font-size: 0.7rem;
+  }
+
+  .complaint-card-details {
+    font-size: 0.75rem;
   }
 
   .forecast-rate {
@@ -1309,6 +1418,7 @@ body {
   cursor: pointer;
   transition: background 0.2s, transform 0.2s;
   line-height: 1;
+  color: var(--text);
 }
 
 .icon-btn:hover {
@@ -1434,6 +1544,324 @@ body {
 .clear-storage-input:focus {
   border-color: #ef4444;
   background: rgba(239, 68, 68, 0.05);
+}
+
+/* ========== Log Calendar ========== */
+.log-calendar {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.cal-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.cal-nav-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.cal-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  flex: 1;
+  text-align: center;
+  text-transform: capitalize;
+}
+
+.cal-nav-btn {
+  min-width: 36px;
+}
+
+.cal-view-btn {
+  margin-inline-start: auto;
+}
+
+.cal-grid {
+  display: grid;
+  gap: 2px;
+  margin-bottom: 1rem;
+}
+
+.cal-month {
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.cal-week {
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.cal-day-name {
+  text-align: center;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  padding: 0.25rem 0;
+  text-transform: uppercase;
+}
+
+.cal-day {
+  position: relative;
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius);
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: all 0.2s;
+  min-height: 40px;
+}
+
+.cal-day:hover:not(.cal-empty) {
+  border-color: var(--accent);
+  transform: scale(1.05);
+}
+
+.cal-day.cal-empty {
+  background: transparent;
+  border: none;
+  cursor: default;
+}
+
+.cal-day.cal-today {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.3);
+}
+
+.cal-day.cal-has-log {
+  background: rgba(99, 102, 241, 0.05);
+}
+
+.cal-day-num {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.cal-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  margin-top: 2px;
+}
+
+.cal-dot-high {
+  background: #22c55e;
+}
+
+.cal-dot-mid {
+  background: #eab308;
+}
+
+.cal-dot-low {
+  background: #ef4444;
+}
+
+/* Week view extras */
+.cal-week-day {
+  aspect-ratio: auto;
+  padding: 0.5rem 0.25rem;
+  min-height: 70px;
+  gap: 2px;
+}
+
+.cal-week-label {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.cal-week-stat {
+  font-size: 0.6rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* Day detail */
+.cal-detail {
+  margin-top: 0.5rem;
+}
+
+.cal-log-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 0.75rem;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin-bottom: 0.35rem;
+}
+
+.cal-log-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.cal-log-time {
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.cal-log-stats {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.cal-pct-high {
+  color: #22c55e;
+  font-weight: 600;
+}
+
+.cal-pct-mid {
+  color: #eab308;
+  font-weight: 600;
+}
+
+.cal-pct-low {
+  color: #ef4444;
+  font-weight: 600;
+}
+
+/* ========== Complaints ========== */
+.complaints-panel {
+  animation: fadeInUp 0.5s ease-out;
+}
+
+.complaint-form {
+  margin-bottom: 1rem;
+}
+
+.complaint-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.complaint-textarea {
+  width: 100%;
+  min-height: 60px;
+  resize: vertical;
+  font-family: inherit;
+}
+
+.complaint-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.complaint-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-left: 3px solid #ef4444;
+  border-radius: var(--radius);
+  padding: 0.75rem;
+  animation: fadeInUp 0.3s ease-out;
+}
+
+.complaint-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.4rem;
+}
+
+.complaint-card-date {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.complaint-card-type {
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  padding: 0.1rem 0.4rem;
+  border-radius: 4px;
+  flex: 1;
+}
+
+.complaint-card-body {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  margin-bottom: 0.3rem;
+}
+
+.complaint-tag {
+  font-size: 0.75rem;
+  background: rgba(99, 102, 241, 0.08);
+  color: var(--text-muted);
+  padding: 0.1rem 0.4rem;
+  border-radius: 4px;
+}
+
+.complaint-card-details {
+  font-size: 0.8rem;
+  color: var(--text);
+  line-height: 1.4;
+  margin-top: 0.3rem;
+  padding-top: 0.3rem;
+  border-top: 1px solid var(--border);
+}
+
+.complaint-photo-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.complaint-photo-btn {
+  cursor: pointer;
+}
+
+.complaint-photo-name {
+  font-size: 0.75rem;
+  color: #22c55e;
+}
+
+.complaint-preview-img {
+  width: 80px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+}
+
+.complaint-card-photo {
+  width: 100%;
+  max-width: 300px;
+  margin-top: 0.5rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.complaint-card-photo:hover {
+  transform: scale(1.02);
+}
+
+.complaint-photo-fullscreen {
+  max-width: 90vw;
+  max-height: 90vh;
+  object-fit: contain;
+  border-radius: 8px;
 }
 
 /* ========== Manual ========== */
@@ -2301,4 +2729,34 @@ kbd {
 [data-theme="light"] .touch-ghost {
   background: #fff;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+/* Calendar */
+[data-theme="light"] .cal-day {
+  background: #fff;
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="light"] .cal-day.cal-has-log {
+  background: rgba(26, 122, 155, 0.05);
+}
+
+[data-theme="light"] .cal-log-item {
+  background: #fff;
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+/* Complaints */
+[data-theme="light"] .complaint-card {
+  background: #fff;
+  border-color: rgba(0, 0, 0, 0.08);
+  border-left-color: #ef4444;
+}
+
+[data-theme="light"] .complaint-tag {
+  background: rgba(26, 122, 155, 0.06);
+}
+
+[data-theme="light"] .tpl-select {
+  color: var(--text-main);
 }

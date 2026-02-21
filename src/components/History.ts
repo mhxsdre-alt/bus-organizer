@@ -23,8 +23,12 @@ export async function saveDayLog(buses: Bus[]) {
     totalCount: buses.length,
   };
   logs.unshift(log); // newest first
-  if (logs.length > 30) logs.length = 30; // keep last 30
-  await dbSet(LOG_KEY, logs);
+  // Auto-purge logs older than 6 months
+  const sixMonthsAgo = new Date();
+  sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
+  const cutoff = sixMonthsAgo.toISOString();
+  const filtered = logs.filter(l => l.date >= cutoff);
+  await dbSet(LOG_KEY, filtered);
 }
 
 export async function getAllLogs(): Promise<DayLog[]> {

@@ -56,6 +56,18 @@ export function renderManual(): HTMLDivElement {
       <ul class="manual-list">${t('manual.analyticsList')}</ul>
     </div>
     <div class="manual-section">
+      <h3 class="manual-heading">${t('manual.logs')}</h3>
+      <ul class="manual-list">${t('manual.logsList')}</ul>
+    </div>
+    <div class="manual-section">
+      <h3 class="manual-heading">${t('manual.complaints')}</h3>
+      <ul class="manual-list">${t('manual.complaintsList')}</ul>
+    </div>
+    <div class="manual-section">
+      <h3 class="manual-heading">${t('manual.clearStorage')}</h3>
+      <ul class="manual-list">${t('manual.clearStorageList')}</ul>
+    </div>
+    <div class="manual-section">
       <h3 class="manual-heading">${t('manual.smart')}</h3>
       <ul class="manual-list">${t('manual.smartList')}</ul>
     </div>

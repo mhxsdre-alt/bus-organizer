@@ -1,9 +1,11 @@
 import './style.css'
 import { BusManager } from './components/BusManager'
 import { renderTemplatePanel } from './components/TemplateManager'
-import { saveDayLog, renderHistory } from './components/History'
+import { saveDayLog } from './components/History'
+import { renderLogCalendar } from './components/LogCalendar'
 import { renderDashboard } from './components/Dashboard'
 import { renderQrPanel, handleCheckInFromUrl } from './components/QrPanel'
+import { renderComplaintsPanel, getAllComplaints } from './components/Complaints'
 import { renderManual } from './components/Manual'
 import { t, getLang, setLang, onLangChange } from './utils/i18n'
 import { initStorage, dbGetAll, dbSet, dbClearAll } from './utils/storage'
@@ -169,6 +171,7 @@ function buildApp() {
     <nav class="tab-bar" id="tab-bar">
       <button class="tab-btn active" data-tab="main">${t('tab.dashboard')}</button>
       <button class="tab-btn" data-tab="analytics">${t('tab.analytics')}</button>
+      <button class="tab-btn" data-tab="logs">${t('tab.logs')}</button>
       <button class="tab-btn" data-tab="manual">${t('tab.manual')}</button>
     </nav>
 
@@ -216,15 +219,20 @@ function buildApp() {
 
       <h2 class="section-title section-collapsible" data-collapse="qr-body">${t('qr.title')}</h2>
       <div id="qr-body"><div id="qr-container"></div></div>
+
+      <h2 class="section-title section-collapsible" data-collapse="comp-body">${t('complaint.title')}</h2>
+      <div id="comp-body"><div id="complaints-container"></div></div>
     </div>
 
     <!-- TAB: Analytics -->
     <div class="tab-content" id="tab-analytics">
-      <h2 class="section-title section-collapsible" data-collapse="history-body">${t('hist.title')}</h2>
-      <div id="history-body"><div id="history-container"></div></div>
-
       <h2 class="section-title section-collapsible" data-collapse="dash-body">${t('dash.title')}</h2>
       <div id="dash-body"><div id="dashboard-container"></div></div>
+    </div>
+
+    <!-- TAB: Logs -->
+    <div class="tab-content" id="tab-logs">
+      <div id="log-calendar-container"></div>
     </div>
 
     <!-- TAB: Manual -->
@@ -311,12 +319,14 @@ function buildApp() {
     reader.readAsText(file);
   });
 
-  // Full Backup (reads from IndexedDB)
+  // Full Backup (reads from IndexedDB + complaints)
   document.getElementById('backup-btn')?.addEventListener('click', async () => {
     const allData = await dbGetAll();
+    const complaints = await getAllComplaints();
     const backup = {
       version: 2,
       storage: allData,
+      complaints,
       theme: localStorage.getItem('bus-theme') || 'dark',
       lang: getLang(),
       exportedAt: new Date().toISOString(),
@@ -345,6 +355,10 @@ function buildApp() {
             // New IndexedDB backup format
             for (const [key, value] of Object.entries(data.storage)) {
               await dbSet(key, value);
+            }
+            // Restore complaints if present
+            if (data.complaints) {
+              await dbSet('bus-organizer-complaints', data.complaints);
             }
           } else {
             // Legacy localStorage backup format
@@ -385,15 +399,19 @@ function buildApp() {
   );
   qrContainer.appendChild(qrPanel);
 
-  // History
-  const historyContainer = document.getElementById('history-container')!;
-  const historyPanel = renderHistory(() => refreshPanels());
-  historyContainer.appendChild(historyPanel);
+  // Complaints Panel
+  const compContainer = document.getElementById('complaints-container')!;
+  compContainer.appendChild(renderComplaintsPanel());
 
   // Dashboard
   const dashContainer = document.getElementById('dashboard-container')!;
   const dashPanel = renderDashboard();
   dashContainer.appendChild(dashPanel);
+
+  // Log Calendar (new Logs tab)
+  const logCalContainer = document.getElementById('log-calendar-container')!;
+  const logCalPanel = renderLogCalendar(() => refreshPanels());
+  logCalContainer.appendChild(logCalPanel);
 
   // Manual
   const manualContainer = document.getElementById('manual-container')!;
@@ -401,6 +419,7 @@ function buildApp() {
 
   function refreshPanels() {
     (dashPanel as any)?._rebuild?.();
+    (logCalPanel as any)?._rebuild?.();
   }
 
   // QR check-in from URL
@@ -417,7 +436,7 @@ function buildApp() {
   makeCollapsible('map-body');
   makeCollapsible('tpl-body');
   makeCollapsible('qr-body');
-  makeCollapsible('history-body');
+  makeCollapsible('comp-body');
   makeCollapsible('dash-body');
 }
 

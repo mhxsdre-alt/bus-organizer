@@ -39,6 +39,7 @@ const translations: Record<Lang, Record<string, string>> = {
         // Tabs
         'tab.dashboard': '🚌 Dashboard',
         'tab.analytics': '📊 Analytics',
+        'tab.logs': '📅 Logs',
         'tab.manual': '📖 Manual',
 
         // Controls
@@ -137,6 +138,40 @@ const translations: Record<Lang, Record<string, string>> = {
         'clear.inputPlaceholder': 'Type DELETE to confirm...',
         'clear.confirm': '🗑️ Erase Everything',
 
+        // Log Calendar
+        'log.monthView': '📅 Month',
+        'log.weekView': '📆 Week',
+        'log.noLogs': 'No logs for this day.',
+
+        // Complaints
+        'complaint.title': '📝 Complaints',
+        'complaint.linePlaceholder': 'Line number',
+        'complaint.platePlaceholder': 'Plate number',
+        'complaint.driverPlaceholder': 'Driver description',
+        'complaint.selectType': 'Select complaint type...',
+        'complaint.detailsPlaceholder': 'Describe the complaint in detail...',
+        'complaint.submit': '📝 Submit Complaint',
+        'complaint.empty': 'No complaints filed yet.',
+        'complaint.addPhoto': 'Add Photo',
+        'complaint.type.rude': 'Rude behavior',
+        'complaint.type.unsafe': 'Unsafe driving',
+        'complaint.type.schedule': 'Not following schedule',
+        'complaint.type.refusing': 'Refusing passengers',
+        'complaint.type.other': 'Other',
+
+        // PDF Report
+        'pdf.title': 'Bus Organizer Report',
+        'pdf.generated': 'Generated',
+        'pdf.total': 'Total',
+        'pdf.arrived': 'Arrived',
+        'pdf.pending': 'Pending',
+        'pdf.yes': 'Yes',
+        'pdf.no': 'No',
+        'pdf.parkingMap': 'Parking Lot Map',
+        'pdf.empty': 'Empty',
+        'pdf.complaintsTitle': 'Complaints Filed Today',
+        'pdf.driver': 'Driver',
+
         // Install banner
         'install.title': 'Install Bus Organizer',
         'install.desc': 'Add to your home screen for quick access & offline use',
@@ -214,6 +249,18 @@ const translations: Record<Lang, Record<string, string>> = {
         'nlr.trendStable': 'Performance trend is steady.',
         'nlr.forecast': 'Predicted next arrival rate: {rate}%.',
 
+        // Manual - Logs Tab
+        'manual.logs': '📅 Logs Tab — Calendar View',
+        'manual.logsList': '<li><strong>What is the Logs tab?</strong> The Logs tab gives you a calendar-based view of all your saved daily logs. You can browse by month or week and see at a glance which days had high or low arrival rates.</li><li><strong>Month view</strong> — Shows a traditional calendar grid. Days with saved logs are marked with colored dots: <span style="color:#22c55e">green</span> = 80%+ arrival rate, <span style="color:#eab308">yellow</span> = 50-79%, <span style="color:#ef4444">red</span> = below 50%.</li><li><strong>Week view</strong> — Shows a 7-day row with more detail per day, including bus count and arrival percentage.</li><li><strong>Day details</strong> — Click any highlighted day to see the full log details: number of buses, arrivals, and percentages.</li><li><strong>Navigation</strong> — Use the ◀ and ▶ arrows to browse previous months or weeks.</li><li><strong>Auto-cleanup</strong> — Logs older than 6 months are automatically removed to keep storage clean.</li>',
+
+        // Manual - Complaints
+        'manual.complaints': '📝 Complaints — Filing Bus Complaints',
+        'manual.complaintsList': '<li><strong>What are complaints?</strong> The complaint system lets you file formal complaints about specific buses and drivers. This is useful for documenting rude behavior, unsafe driving, schedule violations, or passenger refusals.</li><li><strong>Filing a complaint</strong> — Go to the Dashboard tab, scroll down to the Complaints section. Fill in the bus line number, plate number, driver description (optional), select a complaint type from the dropdown, and add details. Click <strong>"Submit Complaint"</strong> to save.</li><li><strong>Complaint types</strong> — Choose from: Rude behavior, Unsafe driving, Not following schedule, Refusing passengers, or Other.</li><li><strong>Complaint history</strong> — All filed complaints are shown as cards with the date, time, type, and details. You can delete complaints you no longer need.</li><li><strong>Backup</strong> — Complaints are included in Full Backup exports and can be restored with Restore Backup.</li>',
+
+        // Manual - Clear Storage
+        'manual.clearStorage': '🗑️ Clear Storage — Starting Fresh',
+        'manual.clearStorageList': '<li><strong>What does Clear Storage do?</strong> It permanently deletes ALL your data: buses, templates, daily logs, complaints, and settings. Use this only if you want to start completely fresh.</li><li><strong>Two-step safety</strong> — To prevent accidental deletion, you must type the word <strong>DELETE</strong> (or <strong>מחיקה</strong> in Hebrew) in the confirmation box before the erase button becomes active.</li><li><strong>⚠️ This cannot be undone!</strong> Make sure to export a Full Backup before clearing if you want to keep your data.</li>',
+
         // Manual - Smart Features
         'manual.smart': '🧠 Smart Insights — Automatic Intelligence',
         'manual.smartList': '<li><strong>Auto-fill Suggestions</strong> — When you type a line number that you\'ve used before, a suggestion chip appears below the input showing the platform and destination this line usually uses. Click <strong>"Apply suggestion"</strong> to auto-fill those fields, saving you time.</li><li><strong>Anomaly Alerts</strong> — The app automatically detects problems and shows colored alerts: <strong>🔴 Red</strong> for critical issues (platform overloaded with 6+ buses), <strong>🟡 Yellow</strong> for warnings (low arrival rate compared to your average), and <strong>🔵 Blue</strong> for informational notices (buses missing platform or destination data).</li><li><strong>Trend Forecast</strong> — Based on your last 7 saved day logs, the app calculates a weighted prediction of your next arrival rate. It also shows whether your performance is improving, declining, or stable over time.</li><li><strong>Natural Language Report</strong> — Instead of just numbers, you get a readable text summary like: "Across 5 days, you\'ve tracked 42 buses with 87% arrival rate. Platform 3 is the busiest. Line 18 is the most reliable." This updates automatically as you save more daily logs.</li><li><strong>💡 Note:</strong> All smart features work 100% offline — they use only your locally saved data, with no internet connection needed.</li>',
@@ -224,6 +271,7 @@ const translations: Record<Lang, Record<string, string>> = {
 
         'tab.dashboard': '🚌 ראשי',
         'tab.analytics': '📊 ניתוח',
+        'tab.logs': '📅 יומנים',
         'tab.manual': '📖 מדריך',
 
         'btn.addBus': '+ הוסף אוטובוס',
@@ -313,6 +361,40 @@ const translations: Record<Lang, Record<string, string>> = {
         'clear.inputPlaceholder': 'הקלד מחיקה לאישור...',
         'clear.confirm': '🗑️ מחק הכל',
 
+        // Log Calendar
+        'log.monthView': '📅 חודש',
+        'log.weekView': '📆 שבוע',
+        'log.noLogs': 'אין יומנים ליום זה.',
+
+        // Complaints
+        'complaint.title': '📝 תלונות',
+        'complaint.linePlaceholder': 'מספר קו',
+        'complaint.platePlaceholder': 'מספר לוחית',
+        'complaint.driverPlaceholder': 'תיאור הנהג',
+        'complaint.selectType': 'בחר סוג תלונה...',
+        'complaint.detailsPlaceholder': 'תאר את התלונה בפירוט...',
+        'complaint.submit': '📝 הגש תלונה',
+        'complaint.empty': 'טרם הוגשו תלונות.',
+        'complaint.addPhoto': 'הוסף תמונה',
+        'complaint.type.rude': 'התנהגות גסה',
+        'complaint.type.unsafe': 'נהיגה מסוכנת',
+        'complaint.type.schedule': 'אי עמידה בלוח זמנים',
+        'complaint.type.refusing': 'סירוב להעלות נוסעים',
+        'complaint.type.other': 'אחר',
+
+        // PDF Report
+        'pdf.title': 'דוח מנהל אוטובוסים',
+        'pdf.generated': 'נוצר בתאריך',
+        'pdf.total': 'סה"כ',
+        'pdf.arrived': 'הגיעו',
+        'pdf.pending': 'ממתינים',
+        'pdf.yes': 'כן',
+        'pdf.no': 'לא',
+        'pdf.parkingMap': 'מפת חנייה',
+        'pdf.empty': 'ריק',
+        'pdf.complaintsTitle': 'תלונות שהוגשו היום',
+        'pdf.driver': 'נהג',
+
         'install.title': 'התקן מנהל אוטובוסים',
         'install.desc': 'הוסף למסך הבית לגישה מהירה ושימוש אופליין',
         'install.btn': 'התקן',
@@ -384,6 +466,18 @@ const translations: Record<Lang, Record<string, string>> = {
         'nlr.trendDown': 'מגמה שלילית: -{pct}% ביומנים האחרונים.',
         'nlr.trendStable': 'מגמת הביצועים יציבה.',
         'nlr.forecast': 'אחוז הגעה צפוי: {rate}%.',
+
+        // Manual - Logs Tab
+        'manual.logs': '📅 לשונית יומנים — תצוגת לוח שנה',
+        'manual.logsList': '<li><strong>מהי לשונית היומנים?</strong> לשונית היומנים מציגה תצוגת לוח שנה של כל היומנים השמורים. ניתן לעיין לפי חודש או שבוע ולראות במבט אחד באילו ימים היה אחוז הגעה גבוה או נמוך.</li><li><strong>תצוגת חודש</strong> — מציגה רשת לוח שנה מסורתית. ימים עם יומנים שמורים מסומנים בנקודות צבעוניות: <span style="color:#22c55e">ירוק</span> = 80%+ הגעות, <span style="color:#eab308">צהוב</span> = 50-79%, <span style="color:#ef4444">אדום</span> = מתחת ל-50%.</li><li><strong>תצוגת שבוע</strong> — מציגה שורה של 7 ימים עם יותר פרטים ליום, כולל מספר אוטובוסים ואחוז הגעה.</li><li><strong>פרטי יום</strong> — לחץ על כל יום מסומן כדי לראות את כל פרטי היומן: מספר אוטובוסים, הגעות ואחוזים.</li><li><strong>ניווט</strong> — השתמש בחצים ◀ ו-▶ כדי לעיין בחודשים או שבועות קודמים.</li><li><strong>ניקוי אוטומטי</strong> — יומנים ישנים מ-6 חודשים נמחקים אוטומטית כדי לשמור על אחסון נקי.</li>',
+
+        // Manual - Complaints
+        'manual.complaints': '📝 תלונות — הגשת תלונות על אוטובוסים',
+        'manual.complaintsList': '<li><strong>מהן תלונות?</strong> מערכת התלונות מאפשרת להגיש תלונות רשמיות על אוטובוסים ונהגים ספציפיים. שימושי לתיעוד התנהגות גסה, נהיגה מסוכנת, אי עמידה בלוח זמנים או סירוב להעלות נוסעים.</li><li><strong>הגשת תלונה</strong> — עבור ללשונית ראשי, גלול למטה למקטע תלונות. מלא מספר קו, מספר לוחית, תיאור הנהג (אופציונלי), בחר סוג תלונה מהרשימה והוסף פרטים. לחץ <strong>"הגש תלונה"</strong> לשמירה.</li><li><strong>סוגי תלונות</strong> — בחר מ: התנהגות גסה, נהיגה מסוכנת, אי עמידה בלוח זמנים, סירוב להעלות נוסעים, או אחר.</li><li><strong>היסטוריית תלונות</strong> — כל התלונות שהוגשו מוצגות ככרטיסים עם תאריך, שעה, סוג ופרטים. ניתן למחוק תלונות שאינך צריך.</li><li><strong>גיבוי</strong> — תלונות כלולות בייצוא גיבוי מלא וניתנות לשחזור עם שחזור גיבוי.</li>',
+
+        // Manual - Clear Storage
+        'manual.clearStorage': '🗑️ מחיקת נתונים — התחלה מחדש',
+        'manual.clearStorageList': '<li><strong>מה עושה מחיקת נתונים?</strong> מוחקת לצמיתות את כל הנתונים: אוטובוסים, תבניות, יומנים, תלונות והגדרות. השתמש רק אם ברצונך להתחיל מאפס.</li><li><strong>אבטחה דו-שלבית</strong> — כדי למנוע מחיקה בטעות, עליך להקליד את המילה <strong>מחיקה</strong> בתיבת האישור לפני שכפתור המחיקה מופעל.</li><li><strong>⚠️ לא ניתן לבטל!</strong> וודא לייצא גיבוי מלא לפני המחיקה אם ברצונך לשמור את הנתונים.</li>',
 
         'manual.smart': '🧠 תובנות חכמות — מודיעין אוטומטי',
         'manual.smartList': '<li><strong>הצעות מילוי אוטומטי</strong> — כשמקלידים מספר קו שהשתמשת בו בעבר, מופיעה הצעה מתחת לשדה עם הרציף והיעד שהקו הזה בדרך כלל משתמש בהם. לחץ <strong>"החל הצעה"</strong> כדי למלא שדות אלה אוטומטית וחסוך זמן.</li><li><strong>התראות חריגות</strong> — האפליקציה מזהה בעיות אוטומטית ומציגה התראות צבעוניות: <strong>🔴 אדום</strong> לבעיות קריטיות (רציף עמוס עם 6+ אוטובוסים), <strong>🟡 צהוב</strong> לאזהרות (אחוז הגעה נמוך לעומת הממוצע), ו-<strong>🔵 כחול</strong> להודעות מידע (אוטובוסים חסרי רציף או יעד).</li><li><strong>תחזית מגמה</strong> — בהתבסס על 7 היומנים האחרונים, האפליקציה מחשבת תחזית משוקללת לאחוז ההגעה הבא. היא גם מציגה אם הביצועים משתפרים, יורדים או יציבים לאורך זמן.</li><li><strong>דוח בשפה טבעית</strong> — במקום רק מספרים, מקבלים סיכום טקסט קריא כמו: "לאורך 5 ימים, עקבת אחרי 42 אוטובוסים עם 87% הגעות. רציף 3 הכי עמוס. קו 18 הכי אמין." הדוח מתעדכן אוטומטית ככל ששומרים יותר יומנים.</li><li><strong>💡 הערה:</strong> כל התכונות החכמות עובדות 100% אופליין — הן משתמשות רק בנתונים השמורים מקומית, ללא צורך בחיבור לאינטרנט.</li>',
